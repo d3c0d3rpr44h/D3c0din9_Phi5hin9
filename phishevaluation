@@ -1,0 +1,109 @@
+
+#/bin/bash
+filefile_name="$1"
+##lines=`cat $filefile_name`
+echo
+echo
+echo
+echo $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$% EVALUATING THE EMAIL HEADER SECTION $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+echo
+## to check DKIM, SPF, DMARC etc
+echo
+echo CHECKING IF EMAIL IS DMARC COMPLIANT-DKIM,SPF- ALIGNMENT AND AUTHENTICATION:
+echo Printing DKIM Values:
+cat $filefile_name | grep -i dkim= | awk -F "dkim=" '{print$2}' | cut -d " " -f 1
+echo
+echo ------------------------------------------------------------------------------------------
+echo Printing SPF Values:
+cat $filefile_name | grep -i spf= | awk -F "spf=" '{print$2}' | cut -d " " -f 1
+echo
+echo ------------------------------------------------------------------------------------------
+echo Printing DMARC Values:
+cat $filefile_name | grep -i dmarc= | awk -F "dmarc=" '{print$2}' | cut -d " " -f 1
+echo 
+
+## to check Failed values
+echo ------------------------------------------------------------------------------------------
+echo PRINTING FAILED AND INVALID VALUES:
+cat $filefile_name | grep -i fail
+cat $filefile_name | grep -i invalid
+echo
+
+## to check common X-headers
+echo ------------------------------------------------------------------------------------------
+echo PRINTING X-ORIGINAL, X-SPAM-DOMAIN SENDER VALUES:
+cat $filefile_name | grep -i origin
+cat $filefile_name | grep -i x-spam-domain
+echo
+
+## top check all x-headers
+echo ------------------------------------------------------------------------------------------
+echo PRINTING ALL X-HEADERS:
+cat $filefile_name | grep -i X-
+echo
+
+## to check if this is simulated email
+echo ------------------------------------------------------------------------------------------
+echo PRINTING CONTENT IF IT IS FROM KNOWBE4 OR LIVING SECURITY-KEEPNETLABS.COM SIMULATION:
+cat $filefile_name | grep -i knowbe
+cat $filefile_name | grep -i keepnetlabs.com
+echo
+
+## To print all from values from eml
+echo ------------------------------------------------------------------------------------------
+echo PRINTING ALL FROM VALUES:
+cat $filefile_name | grep -i from | grep @ | awk -F "from=" '{print$2}'
+echo
+
+## to check email paths
+echo ------------------------------------------------------------------------------------------
+echo PRINTING SMTPMailFrom:
+cat $filefile_name | grep -i smtp.mailfrom= | grep @ | awk -F "mailfrom=" '{print$2}'
+echo
+echo PRINTING Reply-to:
+cat $filefile_name | grep -i Reply-to
+echo
+echo PRINTING Return-Path:
+cat $filefile_name | grep -i Return-Path
+echo
+
+## to check if email contains any back tracking bits and bait tactiv investigation
+echo ------------------------------------------------------------------------------------------
+echo PRINTING IF EMAIL CONTAINS TRACKING BITS OR BAIT TACTICS-FORENSICS:
+cat $filefile_name | grep -i "<img src>"
+cat $filefile_name | grep -i bit
+echo
+
+## prints all email IDs and domains
+echo ------------------------------------------------------------------------------------------
+echo PRINTING ALL EMAILIDS & DOMAINS:
+cat $filefile_name | grep -i -o '[A-Z0-9._%+-]\+@[A-Z0-9.-]\+\.[A-Z]\{2,4\}'
+echo
+
+## to check common give aways
+echo ------------------------------------------------------------------------------------------
+echo CHECKING IF ANY MSG-IDS ARE SAME:
+echo
+echo ------------------------------------------------------------------------------------------
+echo PRINTING IF IT CONTAINS UNDISCLOSED RECIPIENTS:
+cat $filefile_name | grep -i undisclosed-recipients
+echo
+echo ------------------------------------------------------------------------------------------
+echo
+echo
+echo
+
+
+echo $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$% EVALUATING THE EMAIL CONTENT SECTION $%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%$%
+echo
+## to check all URLs embedded
+echo
+echo PRINTING EMBEDDED URLs:
+cat $filefile_name | grep -o -E "href=[\"'](.*)[\"'] "
+cat $filefile_name | grep -o 'http[s]*://[^\\]*'
+cat $filefile_name | grep -o 'http[s]*://[^/][^\\]*'
+echo
+echo ------------------------------------------------------------------------------------------
+
+
+exit
